@@ -1,0 +1,40 @@
+name: Push News to WxPusher
+
+on:
+  schedule:
+    # 北京时间 6:00, 12:00, 18:00, 22:00
+    # UTC 时间 22:00 (前一天), 4:00, 10:00, 14:00
+    - cron: '0 22 * * *'  # 22:00 UTC = 第二天 6:00 CST
+    - cron: '0 4 * * *'   # 4:00 UTC = 12:00 CST
+    - cron: '0 10 * * *'  # 10:00 UTC = 18:00 CST
+    - cron: '0 14 * * *'  # 14:00 UTC = 22:00 CST
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  push-news:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+          
+      - name: Install dependencies
+        run: |
+          corepack enable
+          pnpm install --frozen-lockfile
+          
+      - name: Run news push script
+        env:
+          WXPUSHER_APP_TOKEN: ${{ secrets.WXPUSHER_APP_TOKEN }}
+          WXPUSHER_USER_ID: ${{ secrets.WXPUSHER_USER_ID }}
+          BASE_URL: ${{ secrets.BASE_URL || 'https://newsnow.busiyi.world' }}
+          SOURCE_IDS: ${{ secrets.SOURCE_IDS || 'weibo,zhihu,baidu,bilibili' }}
+          MAX_ITEMS_PER_SOURCE: ${{ secrets.MAX_ITEMS_PER_SOURCE || '3' }}
+        run: |
+          npx tsx scripts/push-news.ts

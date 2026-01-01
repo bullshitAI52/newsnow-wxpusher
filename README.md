@@ -118,6 +118,47 @@ For detailed instructions on how to add new sources, see [CONTRIBUTING.md](CONTR
 **_release when ready_**
 ![](https://testmnbbs.oss-cn-zhangjiakou.aliyuncs.com/pic/20250328172146_rec_.gif?x-oss-process=base_webp)
 
+## WxPusher 定时推送
+
+此功能通过 GitHub Actions 定时将热门新闻推送到微信（使用 WxPusher 服务）。
+
+### 配置步骤
+
+1. **获取 WxPusher 配置**
+   - 注册 [WxPusher](https://wxpusher.zjiecode.com/) 并创建应用
+   - 获取 `APP_TOKEN` 和你的 `UID`
+
+2. **设置 GitHub Secrets**
+   - Fork 本仓库到你的 GitHub 账户
+   - 进入仓库 Settings → Secrets and variables → Actions
+   - 添加以下 Secrets：
+     - `WXPUSHER_APP_TOKEN`: 你的 WxPusher APP_TOKEN
+     - `WXPUSHER_USER_ID`: 你的 WxPusher UID
+     - `BASE_URL`: (可选) 你的 NewsNow 部署地址，默认为 `https://newsnow.busiyi.world`
+     - `SOURCE_IDS`: (可选) 要推送的新闻源 ID，用逗号分隔，默认为 `weibo,zhihu,baidu,bilibili`
+     - `MAX_ITEMS_PER_SOURCE`: (可选) 每个源推送的最大条目数，默认为 `3`
+
+3. **启用 GitHub Actions**
+   - 工作流已配置为每天北京时间 6:00, 12:00, 18:00, 22:00 自动运行
+   - 你也可以在 Actions 标签页手动触发 "Push News to WxPusher" 工作流
+
+### 自定义配置
+
+- 修改 `.github/workflows/push-news.yml` 中的 cron 表达式调整推送时间
+- 修改 `scripts/push-news.ts` 自定义消息格式
+- 支持的新闻源 ID 见 `shared/sources.json`
+
+### 本地测试
+
+```bash
+# 安装依赖
+corepack enable
+pnpm install
+
+# 设置环境变量并运行
+WXPUSHER_APP_TOKEN=your_token WXPUSHER_USER_ID=your_uid pnpm exec tsx scripts/push-news.ts
+```
+
 ## Contributing
 
 Contributions are welcome! Feel free to submit pull requests or create issues for feature requests and bug reports.
