@@ -75,8 +75,8 @@ function formatItem(item: any, index: number) {
   const title = item.title || "无标题"
   const url = item.url || "#"
   const extra = item.extra
-  const info = extra?.info ? ` - ${extra.info}` : ""
-  return `${index + 1}. [${title}](${url})${info}`
+  const info = extra?.info ? ` ${extra.info}` : ""
+  return `${index + 1}.${title}${info}`
 }
 
 // 源ID到名称的映射
@@ -134,24 +134,21 @@ const SOURCE_NAMES: Record<string, string> = {
 
 function formatMessage(sourceItems: Record<string, any[]>) {
   const now = new Date().toLocaleString("zh-CN", { timeZone: "Asia/Shanghai" })
-  let message = `# 📰 新闻推送\n\n**更新时间：${now}**\n\n`
+  let message = `📰${now}\n`
   
   for (const [sourceId, items] of Object.entries(sourceItems)) {
     const sourceName = SOURCE_NAMES[sourceId] || sourceId
     
-    if (items.length === 0) {
-      message += `### ${sourceName}\n\n暂无数据\n\n`
-      continue
-    }
+    if (items.length === 0) continue
     
-    message += `### ${sourceName}\n\n`
+    message += `【${sourceName}】\n`
     items.forEach((item, index) => {
       message += `${formatItem(item, index)}\n`
     })
     message += "\n"
   }
   
-  message += "---\n数据来源: NewsNow"
+  message += "NewsNow"
   return message
 }
 
