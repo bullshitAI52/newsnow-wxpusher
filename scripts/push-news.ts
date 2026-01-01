@@ -5,8 +5,8 @@ import type { SourceID, SourceResponse } from "../shared/types"
 const WXPUSHER_APP_TOKEN = process.env.WXPUSHER_APP_TOKEN
 const WXPUSHER_USER_ID = process.env.WXPUSHER_USER_ID
 const BASE_URL = process.env.BASE_URL || "https://newsnow.busiyi.world"
-const SOURCE_IDS = (process.env.SOURCE_IDS || "weibo,zhihu,baidu,bilibili,toutiao,douyin,hupu,tieba,ithome,github").split(",") as SourceID[]
-const MAX_ITEMS_PER_SOURCE = parseInt(process.env.MAX_ITEMS_PER_SOURCE || "5", 10)
+const SOURCE_IDS = (process.env.SOURCE_IDS || "weibo,zhihu,baidu,bilibili,toutiao").split(",") as SourceID[]
+const MAX_ITEMS_PER_SOURCE = parseInt(process.env.MAX_ITEMS_PER_SOURCE || "3", 10)
 
 // 验证配置
 if (!WXPUSHER_APP_TOKEN || !WXPUSHER_USER_ID) {
