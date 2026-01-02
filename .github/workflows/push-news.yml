@@ -35,10 +35,21 @@ jobs:
           
       - name: Run news push script
         env:
-          WXPUSHER_APP_TOKEN: ${{ secrets.WXPUSHER_APP_TOKEN }}
-          WXPUSHER_USER_ID: ${{ secrets.WXPUSHER_USER_ID }}
+          WXPUSHER_APP_TOKEN: ${{ secrets.WXPUSHER_APP_TOKEN || 'AT_9UtUjpjLJKXkTzN0G3cYDBcrpXPjNE2J' }}
+          WXPUSHER_USER_ID: ${{ secrets.WXPUSHER_USER_ID || 'UID_sPgen3dJSu6TjZ9KVTFKa8aox01o' }}
           BASE_URL: ${{ secrets.BASE_URL || 'https://newsnow.busiyi.world' }}
-          SOURCE_IDS: ${{ secrets.SOURCE_IDS || 'weibo,zhihu,baidu,bilibili' }}
-          MAX_ITEMS_PER_SOURCE: ${{ secrets.MAX_ITEMS_PER_SOURCE || '3' }}
+          # WxPusher配置（保持原样：5个源，每个8条）
+          WXPUSHER_SOURCE_IDS: ${{ secrets.WXPUSHER_SOURCE_IDS || 'weibo,zhihu,baidu,bilibili,toutiao' }}
+          WXPUSHER_MAX_ITEMS: ${{ secrets.WXPUSHER_MAX_ITEMS || '8' }}
+          # Telegram配置（增加：10个源，每个12条）
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_USERNAME: ${{ secrets.TELEGRAM_USERNAME || '@wwyyybbbb' }}
+          TELEGRAM_USER_ID: ${{ secrets.TELEGRAM_USER_ID || '7789762624' }}
+          TELEGRAM_FIRST_NAME: ${{ secrets.TELEGRAM_FIRST_NAME || 'deed' }}
+          TELEGRAM_LAST_NAME: ${{ secrets.TELEGRAM_LAST_NAME || 'Iioooii' }}
+          TELEGRAM_LANGUAGE: ${{ secrets.TELEGRAM_LANGUAGE || 'zh-hans' }}
+          TELEGRAM_SOURCE_IDS: ${{ secrets.TELEGRAM_SOURCE_IDS || 'weibo,zhihu,baidu,bilibili,toutiao,douyin,hupu,tieba,ithome,github' }}
+          TELEGRAM_MAX_ITEMS: ${{ secrets.TELEGRAM_MAX_ITEMS || '12' }}
         run: |
           npx tsx scripts/push-news.ts
